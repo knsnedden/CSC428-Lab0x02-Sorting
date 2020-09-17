@@ -70,7 +70,6 @@ public class Main {
 
             swap(arr,min,i); // put strings in correct order
         }
-
     }
 /*
     public static void mergeSort(char[] arr, int left, int right){
