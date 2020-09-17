@@ -14,7 +14,7 @@ public class Main {
         }
         System.out.println();
 
-	    char[][] ssArr = output, msArr = output;
+	    char[][] ssArr = output, msArr = output, qsArr = output;
 	    for (int i = 0; i < 10; ++i) {
             selectionSort(ssArr[i],10); // testing selection sort
             String str = Arrays.toString(ssArr[i])+" ";
@@ -25,6 +25,13 @@ public class Main {
         for (int i = 0; i < 10; ++i){
             mergeSort(ssArr[i],0,9);
             String str = Arrays.toString(msArr[i])+" ";
+            System.out.print(str);
+        }
+
+        System.out.println();
+        for (int i = 0; i < 10; ++i){
+            quickSort(qsArr[i],0,9);
+            String str = Arrays.toString(qsArr[i]) + " ";
             System.out.print(str);
         }
     }
@@ -119,6 +126,30 @@ public class Main {
         }
     }
 
+    public static void quickSort(char[] arr, int low, int high){
+        if (low < high){
+            int index = quickSortHelper(arr, low, high); // picks a pivot element and places it in correct location in array
+
+            quickSort(arr, low, index - 1); // quick sorts left half
+            quickSort(arr, index + 1, high); // quick sorts right half
+        }
+    }
+
+    public static int quickSortHelper(char[] arr, int low, int high){
+        char pivotPoint = arr[high]; // choose last element as pivot point
+        int index = low - 1;
+
+        // loop through to place pivot element in correct location
+        for (int i = low; i <= high - 1; ++i){
+            if (arr[i] < pivotPoint){ // if this is smaller than the pivot, place it before the pivot point
+                index++; // move to next available location before pivot
+                swap(arr,index,i); // place element before pivot
+            }
+        }
+        swap(arr, index + 1, high); // places pivot point in correct location to allow for elements greater to be sorted correctly
+
+        return index+1;
+    }
 
     public static void swap(char[] arr, int a, int b){
         char temp = arr[a];
