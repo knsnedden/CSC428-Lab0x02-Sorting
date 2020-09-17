@@ -15,13 +15,13 @@ public class Main {
         System.out.println();
 
 	    char[][] ssArr = output, msArr = output, qsArr = output;
-	    for (int i = 0; i < 10; ++i) {
-            selectionSort(ssArr[i],10); // testing selection sort
-            String str = Arrays.toString(ssArr[i])+" ";
+	    selectionSort(ssArr,10); // testing selection sort
+        for (int i = 0; i < 10; ++i) {
+            String str = Arrays.toString(ssArr[i]) + " ";
             System.out.print(str);
         }
 
-        System.out.println();
+     /*   System.out.println();
         for (int i = 0; i < 10; ++i){
             mergeSort(ssArr[i],0,9);
             String str = Arrays.toString(msArr[i])+" ";
@@ -33,7 +33,7 @@ public class Main {
             quickSort(qsArr[i],0,9);
             String str = Arrays.toString(qsArr[i]) + " ";
             System.out.print(str);
-        }
+        }*/
     }
 
     // Generate array of strings to be sorted
@@ -54,25 +54,25 @@ public class Main {
     }
 
     //Simple sort: Selection Sort
-    public static void selectionSort(char[] arr, int k){
+    public static void selectionSort(char[][] arr, int N){
         int min;
 
-
-        // loop through string and sort the characters
-        for (int i = 0; i < k-1; ++i) {
+        // loop through list to sort them alphabetically
+        for (int i = 0; i < N-1; ++i){
             min = i; // set the index we are trying to sort to the minimum
-            // look for the minimum char in the string
-            for (int j = i + 1; j < k; ++j) {
-                if (arr[j] < arr[min]) {
-                    min = j; // if a smaller char is found, store the index
+
+            for (int j = i +1; j < N; ++j){
+                String str = Arrays.toString(arr[j]), minStr = Arrays.toString(arr[min]); // convert the character arrays to strings to compare
+                if (str.compareTo(minStr) < 0){ // if current string is less than the minimum, store the index of it
+                    min = j;
                 }
             }
 
-            // once the smallest element has been found, move it to index j
-            swap(arr, min, i);
+            swap(arr,min,i); // put strings in correct order
         }
-    }
 
+    }
+/*
     public static void mergeSort(char[] arr, int left, int right){
         if (left < right){
             int middle = left + (right - left)/2; // locate the middle index of current list
@@ -149,10 +149,10 @@ public class Main {
         swap(arr, index + 1, high); // places pivot point in correct location to allow for elements greater to be sorted correctly
 
         return index+1;
-    }
+    }*/
 
-    public static void swap(char[] arr, int a, int b){
-        char temp = arr[a];
+    public static void swap(char[][] arr, int a, int b){
+        char[] temp = arr[a];
         arr[a] = arr[b];
         arr[b] = temp;
     }
