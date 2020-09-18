@@ -21,13 +21,13 @@ public class Main {
             System.out.print(str);
         }
 
-     /*   System.out.println();
-        for (int i = 0; i < 10; ++i){
-            mergeSort(ssArr[i],0,9);
-            String str = Arrays.toString(msArr[i])+" ";
+        System.out.println();
+        mergeSort(msArr,9,0,10);
+        for (int i = 0; i < 10; ++i) {
+            String str = Arrays.toString(msArr[i]) + " ";
             System.out.print(str);
         }
-
+        /*
         System.out.println();
         for (int i = 0; i < 10; ++i){
             quickSort(qsArr[i],0,9);
@@ -71,26 +71,26 @@ public class Main {
             swap(arr,min,i); // put strings in correct order
         }
     }
-/*
-    public static void mergeSort(char[] arr, int left, int right){
+
+    public static void mergeSort(char[][] arr, int left, int right, int k){
         if (left < right){
             int middle = left + (right - left)/2; // locate the middle index of current list
 
-            mergeSort(arr,left,middle); // merge sorts the left half of current list
-            mergeSort(arr,middle+1,right); // merge sorts right half of current list
+            mergeSort(arr,left,middle,k); // merge sorts the left half of current list
+            mergeSort(arr,middle+1,right,k); // merge sorts right half of current list
 
             //merging lists back together
-            merge(arr,left, middle, right);
+            merge(arr,left, middle, right,k);
 
         }
     }
-    public static void merge(char[] arr, int left, int middle, int right){
+    public static void merge(char[][] arr, int left, int middle, int right, int k){
         // determine the sizes of the left and right halves of array section
         int leftSize = middle - left + 1;
         int rightSize = right - middle;
         // create new arrays to hold the left and right halves of array section
-        char[] leftArr = new char[leftSize];
-        char[] rightArr = new char[rightSize];
+        char[][] leftArr = new char[leftSize][k];
+        char[][] rightArr = new char[rightSize][k];
 
         // populate the arrays
         for (int i = 0; i < leftSize; ++i){
@@ -100,31 +100,32 @@ public class Main {
             rightArr[j] = arr[middle + 1 + j];
         }
 
-        int i = 0, j = 0, k = left;
+        int i = 0, j = 0, x = left;
         // loop through the left and right arrays to sort this section of the array
         while (i < leftSize && j < rightSize){
-            if (leftArr[i] <= rightArr[j]){ // if the current left array element is smaller than right array element, place in smallest available spot in overall array
-                arr[k] = leftArr[i];
+            String leftStr = Arrays.toString(leftArr[i]), rightStr = Arrays.toString(rightArr[j]);
+            if (leftStr.compareTo(rightStr) <= 0){ // if the current left array string is smaller than right array element, place in smallest available spot in overall array
+                arr[x] = leftArr[i];
                 i++;
             }
-            else{ // if not, place right array element into smallest available spot in overall array
-                arr[k] = rightArr[j];
+            else{ // if not, place right array string into smallest available spot in overall array
+                arr[x] = rightArr[j];
                 j++;
             }
             k++;
         }
-        while (i < leftSize){ // if any leftover elements in left array, put them in overall array
-            arr[k] = leftArr[i];
+        while (i < leftSize){ // if any leftover strings in left array, put them in overall array
+            arr[x] = leftArr[i];
             ++i;
-            ++k;
+            ++x;
         }
-        while (j < rightSize){ // if any leftover elements in right array, put them in overall array
-            arr[k] = rightArr[j];
+        while (j < rightSize){ // if any leftover strings in right array, put them in overall array
+            arr[x] = rightArr[j];
             ++j;
-            ++k;
+            ++x;
         }
     }
-
+/*
     public static void quickSort(char[] arr, int low, int high){
         if (low < high){
             int index = quickSortHelper(arr, low, high); // picks a pivot element and places it in correct location in array
