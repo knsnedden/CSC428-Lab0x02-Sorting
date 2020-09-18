@@ -15,25 +15,25 @@ public class Main {
         System.out.println();
 
 	    char[][] ssArr = output, msArr = output, qsArr = output;
-	    selectionSort(ssArr,10); // testing selection sort
+	   /* selectionSort(ssArr,10); // testing selection sort
         for (int i = 0; i < 10; ++i) {
             String str = Arrays.toString(ssArr[i]) + " ";
             System.out.print(str);
         }
 
         System.out.println();
-        mergeSort(msArr,9,0,10);
+        mergeSort(msArr,0,9,10);
         for (int i = 0; i < 10; ++i) {
             String str = Arrays.toString(msArr[i]) + " ";
             System.out.print(str);
-        }
-        /*
-        System.out.println();
+        }*/
+
+       System.out.println();
+        quickSort(qsArr,0,9);
         for (int i = 0; i < 10; ++i){
-            quickSort(qsArr[i],0,9);
             String str = Arrays.toString(qsArr[i]) + " ";
             System.out.print(str);
-        }*/
+        }
     }
 
     // Generate array of strings to be sorted
@@ -112,7 +112,7 @@ public class Main {
                 arr[x] = rightArr[j];
                 j++;
             }
-            k++;
+            x++;
         }
         while (i < leftSize){ // if any leftover strings in left array, put them in overall array
             arr[x] = leftArr[i];
@@ -125,8 +125,8 @@ public class Main {
             ++x;
         }
     }
-/*
-    public static void quickSort(char[] arr, int low, int high){
+
+    public static void quickSort(char[][] arr, int low, int high){
         if (low < high){
             int index = quickSortHelper(arr, low, high); // picks a pivot element and places it in correct location in array
 
@@ -135,13 +135,14 @@ public class Main {
         }
     }
 
-    public static int quickSortHelper(char[] arr, int low, int high){
-        char pivotPoint = arr[high]; // choose last element as pivot point
+    public static int quickSortHelper(char[][] arr, int low, int high){
+        char[] pivotPoint = arr[high]; // choose last string as pivot point
         int index = low - 1;
 
         // loop through to place pivot element in correct location
         for (int i = low; i <= high - 1; ++i){
-            if (arr[i] < pivotPoint){ // if this is smaller than the pivot, place it before the pivot point
+            String str = Arrays.toString(arr[i]), pivot = Arrays.toString(pivotPoint);
+            if (str.compareTo(pivot) < 0){ // if this is smaller than the pivot, place it before the pivot point
                 index++; // move to next available location before pivot
                 swap(arr,index,i); // place element before pivot
             }
@@ -149,7 +150,7 @@ public class Main {
         swap(arr, index + 1, high); // places pivot point in correct location to allow for elements greater to be sorted correctly
 
         return index+1;
-    }*/
+    }
 
     public static void swap(char[][] arr, int a, int b){
         char[] temp = arr[a];
