@@ -2,6 +2,7 @@ package com.company;
 
 import java.util.Random;
 import java.util.Arrays;
+import java.lang.Math;
 
 public class Main {
 
@@ -14,7 +15,8 @@ public class Main {
         }
         System.out.println();
 
-	    char[][] ssArr = output, msArr = output, qsArr = output;
+	    char[][] ssArr = output, msArr = output, qsArr = output, rsSort = output;
+	    // VISUAL TESTING
 	   /* selectionSort(ssArr,10); // testing selection sort
         for (int i = 0; i < 10; ++i) {
             String str = Arrays.toString(ssArr[i]) + " ";
@@ -28,10 +30,16 @@ public class Main {
             System.out.print(str);
         }*/
 
-       System.out.println();
+      /* System.out.println();
         quickSort(qsArr,0,9);
         for (int i = 0; i < 10; ++i){
             String str = Arrays.toString(qsArr[i]) + " ";
+            System.out.print(str);
+        }*/
+
+        radixSort(rsSort,10,10, 1);
+        for (int i = 0; i < 10; ++i){
+            String str = Arrays.toString(rsSort[i]) + " ";
             System.out.print(str);
         }
     }
@@ -151,6 +159,56 @@ public class Main {
 
         return index+1;
     }
+
+
+    /*
+    * Parts of this function is taken from algs4.cs.princeton.edu/51radix/LSD.java.html
+    * I modified it to be compatible with different key segment sizes
+    * */
+    public static void radixSort(char[][] arr, int N, int k, int d){
+
+        long chars = (long)Math.pow(2,8*d); // this determines how many possible values for char representation
+        char[][] output = new char[N][k];
+
+
+        for (int a = (k-1)/d; a >= 0; a--){
+            int[] freq = new int[(int)chars+1];
+
+            // loop through list of strings and count frequency of how many times a key segment appears
+            for (int i = 0; i < N; i++){
+                int s = 0; // this will store the int representation of the key segment
+                for (int j = d-1; j >= 0; j--){
+                    int x = 0;
+                    s += (int)Math.pow(2,8*j) * arr[i][a+x]; // this calculate the int representation of the key segment
+                    ++x;
+                }
+                freq[s+1]++; // increment a key segment when it appears
+            }
+
+            // compute the cumulates -- this tells us where strings will be in the output
+            for (int i = 0; i < chars; i++){
+                freq[i+1] += freq[i];
+            }
+
+            // move the strings where they are supposed to be
+            for (int i = 0; i < N; i++){
+                int s = 0;
+                for (int j = d-1; j >= 0; j--){
+                    int x = 0;
+                    s += (int)Math.pow(2,8*j) * arr[i][a+x]; // this calculate the int representation of the key segment
+                    ++x;
+                }
+                output[freq[s]++] = arr[i];
+            }
+
+            // copy back to array
+            for (int i = 0; i < N; ++i){
+                arr[i] = output[i];
+            }
+        }
+
+    }
+
 
     public static void swap(char[][] arr, int a, int b){
         char[] temp = arr[a];
