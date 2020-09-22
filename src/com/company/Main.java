@@ -1,131 +1,37 @@
 package com.company;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.util.Random;
 import java.util.Arrays;
 import java.lang.Math;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 
 public class Main {
 
     public static void main(String[] args) {
-	    char[][] output;
-	    //VISUAL TESTING
-        /*
-	    output = generateTestList(10,10,65,90); // testing generation
-        System.out.println("UNSORTED LIST: ");
-	    for (int i = 0; i < 10; ++i){
-	        String str = Arrays.toString(output[i])+" ";
-	        System.out.print(str);
-        }
 
-	    char[][] ssArr = output.clone(), msArr = output.clone(), qsArr = output.clone(), rsArr = output.clone(),
-                 rs2Arr = output.clone(), rs3Arr = output.clone();
-        System.out.println("\nSELECTION SORT: ");
-	    selectionSort(ssArr,10); // testing selection sort
-        for (int i = 0; i < 10; ++i) {
-            String str = Arrays.toString(ssArr[i]) + " ";
-            System.out.print(str);
-        }
+        // SELECTION SORT TEST
+        System.out.println("SELECTION SORT:");
+        selectionSortTimeTest();
 
-        System.out.println("\nMERGE SORT: ");
-        mergeSort(msArr,0,9,10);
-        for (int i = 0; i < 10; ++i) {
-            String str = Arrays.toString(msArr[i]) + " ";
-            System.out.print(str);
-        }
+        //MERGE SORT TEST
+        System.out.println("MERGE SORT:");
+        mergeSortTimeTest();
 
-        System.out.println("\nQUICK SORT: ");
-        quickSort(qsArr,0,9);
-        for (int i = 0; i < 10; ++i){
-            String str = Arrays.toString(qsArr[i]) + " ";
-            System.out.print(str);
-        }
+        //QUICK SORT TEST
+        System.out.println("QUICK SORT:");
+        quickSortTimeTest();
 
-        System.out.println("\nRADIX-1 SORT: ");
-        radixSort(rsArr,10,10, 1);
-        for (int i = 0; i < 10; ++i){
-            String str = Arrays.toString(rsArr[i]) + " ";
-            System.out.print(str);
-        }
+        //RADIX SORT TEST
+        System.out.println("RADIX-1 SORT:");
+        radixSortTimeTest(1);
+        System.out.println("RADIX-2 SORT:");
+        radixSortTimeTest(2);
+        System.out.println("RADIX-3 SORT:");
+        radixSortTimeTest(3);
 
-        System.out.println("\nRADIX-2 SORT: ");
-        radixSort(rs2Arr,10,10, 2);
-        for (int i = 0; i < 10; ++i){
-            String str = Arrays.toString(rs2Arr[i]) + " ";
-            System.out.print(str);
-        }
-
-        System.out.println("\nRADIX-3 SORT: ");
-        radixSort(rs3Arr,10,10, 3);
-        for (int i = 0; i < 10; ++i){
-            String str = Arrays.toString(rs3Arr[i]) + " ";
-            System.out.print(str);
-        }*/
-
-        // isSorted testing
-        int N = 10000;
-        int k = 16;
-        char[][] array;
-        System.out.printf("Generating list of size %d with key size %d...\n", N, k);
-        array = generateTestList(N,k,1,255);
-        char[][] ssArr = array.clone(), msArr = array.clone(), qsArr = array.clone(), rsArr = array.clone(), rs2Arr = array.clone(), rs3Arr = array.clone();
-        //Selection sort
-        System.out.println("Sorting with selection sort");
-        selectionSort(ssArr,N);
-        System.out.print("Verifying... ");
-        if (isSorted(ssArr)){
-            System.out.println("Sorted!");
-        }else{
-            System.out.println("Not sorted :(");
-        }
-        //Merge sort
-        System.out.println("Sorting with merge sort");
-        mergeSort(msArr,0,N-1,k);
-        System.out.print("Verifying... ");
-        if (isSorted(msArr)){
-            System.out.println("Sorted!");
-        }else{
-            System.out.println("Not sorted :(");
-        }
-
-        //Quick sort
-        System.out.println("Sorting with quick sort");
-        quickSort(qsArr,0,N-1);
-        System.out.print("Verifying... ");
-        if (isSorted(qsArr)){
-            System.out.println("Sorted!");
-        }else{
-            System.out.println("Not sorted :(");
-        }
-
-        //Radix-1 sort
-        System.out.println("Sorting with radix-1 sort");
-        radixSort(rsArr, N, k, 1);
-        System.out.print("Verifying... ");
-        if (isSorted(rsArr)){
-            System.out.println("Sorted!");
-        }else{
-            System.out.println("Not sorted :(");
-        }
-
-        //Radix-2 sort
-        System.out.println("Sorting with radix-2 sort");
-        radixSort(rsArr, N, k, 2);
-        System.out.print("Verifying... ");
-        if (isSorted(rsArr)){
-            System.out.println("Sorted!");
-        }else{
-            System.out.println("Not sorted :(");
-        }
-
-        //Radix-3 sort
-        System.out.println("Sorting with radix-3 sort");
-        radixSort(rsArr, N, k, 3);
-        System.out.print("Verifying... ");
-        if (isSorted(rsArr)){
-            System.out.println("Sorted!");
-        }else{
-            System.out.println("Not sorted :(");
-        }
     }
 
     // Generate array of strings to be sorted
@@ -312,6 +218,353 @@ public class Main {
         }
 
         return result;
+    }
+
+    public static void selectionSortTimeTest(){
+        float dr = 0, pdr = 0;
+        int N_prev = 0;
+        char[][] arr;
+        float k6time=0, k12time=0, k24time=0, k48time=0;
+        long timeBefore, timeAfter, difference=0, maxTime = (long)Math.pow(2,36);
+        int N = 10;
+        System.out.println("             k = 6                         k = 12                        k = 24                        k = 48                                                ");
+        System.out.println("    N    |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio | Predicted Doubling Ratio |");
+
+        while (difference < maxTime){
+            System.out.printf("%8d |", N);
+            // sort with k = 6
+            arr = generateTestList(N,6,1,255);
+            timeBefore = getCpuTime();
+            selectionSort(arr,N);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k6time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k6time = difference;
+
+            //sort with k = 12
+            arr = generateTestList(N,12,1,255);
+            timeBefore = getCpuTime();
+            selectionSort(arr,N);
+            timeAfter = getCpuTime();
+            difference = timeAfter-timeBefore;
+            if (N != 10){
+                dr = difference/k12time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k12time = difference;
+
+            // sort with k = 24
+            arr = generateTestList(N,24,1,255);
+            timeBefore = getCpuTime();
+            selectionSort(arr,N);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k24time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k24time = difference;
+
+            //sort with k = 48
+            arr = generateTestList(N,48,1,255);
+            timeBefore = getCpuTime();
+            selectionSort(arr,N);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k48time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k48time = difference;
+
+            if (N != 10){
+                pdr = (float)(Math.pow(N,2)/Math.pow(N_prev,2));
+                System.out.printf("%25.2f |\n", pdr);
+            }
+            else{
+                System.out.printf("           na             |\n");
+            }
+            N_prev = N;
+            N = N*2;
+        }
+
+    }
+
+    public static void mergeSortTimeTest(){
+        float dr = 0, pdr = 0;
+        int N_prev = 0;
+        char[][] arr;
+        float k6time=0, k12time=0, k24time=0, k48time=0;
+        long timeBefore, timeAfter, difference=0, maxTime = (long)Math.pow(2,36);
+        int N = 10;
+        System.out.println("             k = 6                         k = 12                        k = 24                        k = 48                                                ");
+        System.out.println("    N    |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio | Predicted Doubling Ratio |");
+
+        while (difference < maxTime){
+            System.out.printf("%8d |", N);
+            // sort with k = 6
+            arr = generateTestList(N,6,1,255);
+            timeBefore = getCpuTime();
+            mergeSort(arr,0,N-1,6);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k6time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k6time = difference;
+
+            //sort with k = 12
+            arr = generateTestList(N,12,1,255);
+            timeBefore = getCpuTime();
+            mergeSort(arr,0,N-1,12);
+            timeAfter = getCpuTime();
+            difference = timeAfter-timeBefore;
+            if (N != 10){
+                dr = difference/k12time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k12time = difference;
+
+            // sort with k = 24
+            arr = generateTestList(N,24,1,255);
+            timeBefore = getCpuTime();
+            mergeSort(arr,0,N-1,24);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k24time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k24time = difference;
+
+            //sort with k = 48
+            arr = generateTestList(N,48,1,255);
+            timeBefore = getCpuTime();
+            mergeSort(arr,0,N-1,48);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k48time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k48time = difference;
+
+            if (N != 10){
+                pdr = (N*(float)Math.log(N))/(N*(float)Math.log(N_prev));
+                System.out.printf("%25.2f |\n", pdr);
+            }
+            else{
+                System.out.printf("           na             |\n");
+            }
+            N_prev = N;
+            N = N*2;
+        }
+
+    }
+
+
+    public static void radixSortTimeTest(int d){
+        float dr = 0, pdr = 0;
+        int N_prev = 0;
+        char[][] arr;
+        float k6time=0, k12time=0, k24time=0, k48time=0;
+        long timeBefore, timeAfter, difference=0, maxTime = (long)Math.pow(2,30);
+        int N = 10;
+        System.out.println("             k = 6                         k = 12                        k = 24                        k = 48                                                ");
+        System.out.println("    N    |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio | Predicted Doubling Ratio |");
+
+        while (difference < maxTime){
+            System.out.printf("%8d |", N);
+            // sort with k = 6
+            arr = generateTestList(N,6,1,255);
+            timeBefore = getCpuTime();
+            radixSort(arr,N,6,d);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k6time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k6time = difference;
+
+            //sort with k = 12
+            arr = generateTestList(N,12,1,255);
+            timeBefore = getCpuTime();
+            radixSort(arr,N,12,d);
+            timeAfter = getCpuTime();
+            difference = timeAfter-timeBefore;
+            if (N != 10){
+                dr = difference/k12time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k12time = difference;
+
+            // sort with k = 24
+            arr = generateTestList(N,24,1,255);
+            timeBefore = getCpuTime();
+            radixSort(arr,N,24,d);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k24time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k24time = difference;
+
+            //sort with k = 48
+            arr = generateTestList(N,48,1,255);
+            timeBefore = getCpuTime();
+            radixSort(arr,N,48,d);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k48time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k48time = difference;
+
+            if (N != 10){
+                pdr = (N*48)/(N_prev*48);
+                System.out.printf("%25.2f |\n", pdr);
+            }
+            else{
+                System.out.printf("           na             |\n");
+            }
+            N_prev = N;
+            N = N*2;
+        }
+
+    }
+
+    public static void quickSortTimeTest(){
+        float dr = 0, pdr = 0;
+        int N_prev = 0;
+        char[][] arr;
+        float k6time=0, k12time=0, k24time=0, k48time=0;
+        long timeBefore, timeAfter, difference=0, maxTime = (long)Math.pow(2,36);
+        int N = 10;
+        System.out.println("             k = 6                         k = 12                        k = 24                        k = 48                                                ");
+        System.out.println("    N    |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio |    Time    | Doubling Ratio | Predicted Doubling Ratio |");
+
+        while (difference < maxTime){
+            System.out.printf("%8d |", N);
+            // sort with k = 6
+            arr = generateTestList(N,6,1,255);
+            timeBefore = getCpuTime();
+            quickSort(arr,0,N-1);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k6time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k6time = difference;
+
+            //sort with k = 12
+            arr = generateTestList(N,12,1,255);
+            timeBefore = getCpuTime();
+            quickSort(arr,0,N-1);
+            timeAfter = getCpuTime();
+            difference = timeAfter-timeBefore;
+            if (N != 10){
+                dr = difference/k12time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k12time = difference;
+
+            // sort with k = 24
+            arr = generateTestList(N,24,1,255);
+            timeBefore = getCpuTime();
+            quickSort(arr,0,N-1);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k24time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k24time = difference;
+
+            //sort with k = 48
+            arr = generateTestList(N,48,1,255);
+            timeBefore = getCpuTime();
+            quickSort(arr,0,N-1);
+            timeAfter = getCpuTime();
+            difference = timeAfter - timeBefore;
+            if (N != 10){
+                dr = difference/k48time;
+                System.out.printf("%11d |%15.3f |", difference,dr);
+            }
+            else{
+                System.out.printf("%11d |      na        |", difference);
+            }
+            k48time = difference;
+
+            if (N != 10){
+                pdr = (N*(float)Math.log(N))/(N*(float)Math.log(N_prev));
+                System.out.printf("%25.2f |\n", pdr);
+            }
+            else{
+                System.out.printf("           na             |\n");
+            }
+            N_prev = N;
+            N = N*2;
+        }
+
+    }
+
+    public static long getCpuTime(){
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        return bean.isCurrentThreadCpuTimeSupported() ?
+                bean.getCurrentThreadCpuTime() : 0L;
     }
 
 }
