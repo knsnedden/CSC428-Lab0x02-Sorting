@@ -8,39 +8,123 @@ public class Main {
 
     public static void main(String[] args) {
 	    char[][] output;
+	    //VISUAL TESTING
+        /*
 	    output = generateTestList(10,10,65,90); // testing generation
+        System.out.println("UNSORTED LIST: ");
 	    for (int i = 0; i < 10; ++i){
 	        String str = Arrays.toString(output[i])+" ";
 	        System.out.print(str);
         }
-        System.out.println();
 
-	    char[][] ssArr = output, msArr = output, qsArr = output, rsSort = output;
-	    // VISUAL TESTING
-	   /* selectionSort(ssArr,10); // testing selection sort
+	    char[][] ssArr = output.clone(), msArr = output.clone(), qsArr = output.clone(), rsArr = output.clone(),
+                 rs2Arr = output.clone(), rs3Arr = output.clone();
+        System.out.println("\nSELECTION SORT: ");
+	    selectionSort(ssArr,10); // testing selection sort
         for (int i = 0; i < 10; ++i) {
             String str = Arrays.toString(ssArr[i]) + " ";
             System.out.print(str);
         }
 
-        System.out.println();
+        System.out.println("\nMERGE SORT: ");
         mergeSort(msArr,0,9,10);
         for (int i = 0; i < 10; ++i) {
             String str = Arrays.toString(msArr[i]) + " ";
             System.out.print(str);
-        }*/
+        }
 
-      /* System.out.println();
+        System.out.println("\nQUICK SORT: ");
         quickSort(qsArr,0,9);
         for (int i = 0; i < 10; ++i){
             String str = Arrays.toString(qsArr[i]) + " ";
             System.out.print(str);
+        }
+
+        System.out.println("\nRADIX-1 SORT: ");
+        radixSort(rsArr,10,10, 1);
+        for (int i = 0; i < 10; ++i){
+            String str = Arrays.toString(rsArr[i]) + " ";
+            System.out.print(str);
+        }
+
+        System.out.println("\nRADIX-2 SORT: ");
+        radixSort(rs2Arr,10,10, 2);
+        for (int i = 0; i < 10; ++i){
+            String str = Arrays.toString(rs2Arr[i]) + " ";
+            System.out.print(str);
+        }
+
+        System.out.println("\nRADIX-3 SORT: ");
+        radixSort(rs3Arr,10,10, 3);
+        for (int i = 0; i < 10; ++i){
+            String str = Arrays.toString(rs3Arr[i]) + " ";
+            System.out.print(str);
         }*/
 
-        radixSort(rsSort,10,10, 1);
-        for (int i = 0; i < 10; ++i){
-            String str = Arrays.toString(rsSort[i]) + " ";
-            System.out.print(str);
+        // isSorted testing
+        int N = 10000;
+        int k = 16;
+        char[][] array;
+        System.out.printf("Generating list of size %d with key size %d...\n", N, k);
+        array = generateTestList(N,k,1,255);
+        char[][] ssArr = array.clone(), msArr = array.clone(), qsArr = array.clone(), rsArr = array.clone(), rs2Arr = array.clone(), rs3Arr = array.clone();
+        //Selection sort
+        System.out.println("Sorting with selection sort");
+        selectionSort(ssArr,N);
+        System.out.print("Verifying... ");
+        if (isSorted(ssArr)){
+            System.out.println("Sorted!");
+        }else{
+            System.out.println("Not sorted :(");
+        }
+        //Merge sort
+        System.out.println("Sorting with merge sort");
+        mergeSort(msArr,0,N-1,k);
+        System.out.print("Verifying... ");
+        if (isSorted(msArr)){
+            System.out.println("Sorted!");
+        }else{
+            System.out.println("Not sorted :(");
+        }
+
+        //Quick sort
+        System.out.println("Sorting with quick sort");
+        quickSort(qsArr,0,N-1);
+        System.out.print("Verifying... ");
+        if (isSorted(qsArr)){
+            System.out.println("Sorted!");
+        }else{
+            System.out.println("Not sorted :(");
+        }
+
+        //Radix-1 sort
+        System.out.println("Sorting with radix-1 sort");
+        radixSort(rsArr, N, k, 1);
+        System.out.print("Verifying... ");
+        if (isSorted(rsArr)){
+            System.out.println("Sorted!");
+        }else{
+            System.out.println("Not sorted :(");
+        }
+
+        //Radix-2 sort
+        System.out.println("Sorting with radix-2 sort");
+        radixSort(rsArr, N, k, 2);
+        System.out.print("Verifying... ");
+        if (isSorted(rsArr)){
+            System.out.println("Sorted!");
+        }else{
+            System.out.println("Not sorted :(");
+        }
+
+        //Radix-3 sort
+        System.out.println("Sorting with radix-3 sort");
+        radixSort(rsArr, N, k, 3);
+        System.out.print("Verifying... ");
+        if (isSorted(rsArr)){
+            System.out.println("Sorted!");
+        }else{
+            System.out.println("Not sorted :(");
         }
     }
 
@@ -214,6 +298,20 @@ public class Main {
         char[] temp = arr[a];
         arr[a] = arr[b];
         arr[b] = temp;
+    }
+
+    public static boolean isSorted(char[][] arr){
+        boolean result = true;
+
+        for (int i = 0; i < arr.length - 1; ++i){
+            String str1 = Arrays.toString(arr[i]), str2 = Arrays.toString(arr[i+1]);
+            if (str1.compareTo(str2) > 0){
+                result = false;
+                return result;
+            }
+        }
+
+        return result;
     }
 
 }
